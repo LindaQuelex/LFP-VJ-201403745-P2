@@ -1,0 +1,195 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"> 
+	<link href='https://fonts.googleapis.com/css?family=Roboto:400,100,300,700' rel='stylesheet' type='text/css'>
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+	<link rel="stylesheet" href="css/style.css">
+    <title>REPORTE</title>
+</head>
+<body>
+    
+	<section class="ftco-section">
+		<div class="container">
+			<div class="row justify-content-center">
+				<div class="col-md-6 text-center mb-5">
+					<h2 class="heading-section">Reporte de Tokens</h2>
+				</div>
+			</div>
+    
+            <div class = "row" >
+                <div class = "col-md-12" > 
+                    <div class = "table-wrap" >
+                        <table class = "table" >
+                            <thead class="thead-primary">
+                            <tr>
+                                <th> Linea </th>
+                                <th> Columna</th>
+                                <th> Lexema</th>
+                                <th> Token </th>
+                                <th> Patron </th>
+                            </tr>
+                            </thead>
+    
+                            <tbody>
+          <tr >
+                                    <td>1</td>
+                                    <td>1</td>
+                                    <td>//ricardo</td>
+                                    <td>tk_comentario_simple</td>
+                                    <td>//.*</td>
+                                </tr>      <tr >
+                                    <td>2</td>
+                                    <td>1</td>
+                                    <td>/*h
+sfs
+qwe*/</td>
+                                    <td>tk_comentario_var_filas</td>
+                                    <td>\/\*.*\*\/</td>
+                                </tr>      <tr >
+                                    <td>3</td>
+                                    <td>1</td>
+                                    <td>12</td>
+                                    <td>tk_dato_tipo_Int</td>
+                                    <td>dd*</td>
+                                </tr>      <tr >
+                                    <td>4</td>
+                                    <td>1</td>
+                                    <td>56.7</td>
+                                    <td>tk_dato_double</td>
+                                    <td>dd+.dd*</td>
+                                </tr>      <tr >
+                                    <td>5</td>
+                                    <td>1</td>
+                                    <td>/*9sfacoen
+qwe23"#"$"*/</td>
+                                    <td>tk_comentario_var_filas</td>
+                                    <td>\/\*.*\*\/</td>
+                                </tr>      <tr >
+                                    <td>6</td>
+                                    <td>2</td>
+                                    <td>*</td>
+                                    <td>tk_multiplicacion</td>
+                                    <td>*</td>
+                                </tr>      <tr >
+                                    <td>7</td>
+                                    <td>2</td>
+                                    <td>-</td>
+                                    <td>tk_resta</td>
+                                    <td>-</td>
+                                </tr>      <tr >
+                                    <td>8</td>
+                                    <td>2</td>
+                                    <td>/</td>
+                                    <td>tk_division</td>
+                                    <td>/</td>
+                                </tr>      <tr >
+                                    <td>9</td>
+                                    <td>2</td>
+                                    <td>+</td>
+                                    <td>tk_suma</td>
+                                    <td>+</td>
+                                </tr>      <tr >
+                                    <td>10</td>
+                                    <td>3</td>
+                                    <td><=</td>
+                                    <td>tk_menor_o_igual_que</td>
+                                    <td><=</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+				</div>
+			</div>
+		</div>
+	</section>
+    
+	<section class="ftco-section">
+		<div class="container">
+			<div class="row justify-content-center">
+				<div class="col-md-6 text-center mb-5">
+					<h2 class="heading-section">Reporte de Estados</h2>
+				</div>
+			</div>
+    
+            <div class = "row" >
+                <div class = "col-md-12" > 
+                    <div class = "table-wrap" >
+                        <table class = "table" >
+                            <thead class="thead-primary">
+                            <tr>
+                                <th> Estado </th>
+                                <th> Caracter </th>
+                                <th> Lexema reconocido</th>
+                                <th> Siguiente estado </th>
+                            </tr>
+                            </thead>
+    
+                            <tbody>
+    
+                            </tbody>
+                        </table>
+                    </div>
+				</div>
+			</div>
+		</div>
+	</section>
+    
+	<section class="ftco-section">
+		<div class="container">
+			<div class="row justify-content-center">
+				<div class="col-md-6 text-center mb-5">
+					<h2 class="heading-section">Reporte de Errores</h2>
+				</div>
+			</div>
+    
+            <div class = "row" >
+                <div class = "col-md-12" > 
+                    <div class = "table-wrap" >
+                        <table class = "table" >
+                            <thead class="thead-primary">
+                            <tr>
+                                <th> Linea </th>
+                                <th> Columna</th>
+                                <th> Lexema</th>
+
+                            </tr>
+                            </thead>
+    
+                            <tbody>
+          <tr >
+                                    <td>5</td>
+                                    <td>1</td>
+                                    <td>
+/*9sfacoen
+qwe23"#"$"*/
+*
+-
+/
++
+<=?</td>
+
+                                </tr>      <tr >
+                                    <td>10</td>
+                                    <td>3</td>
+                                    <td>?</td>
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+				</div>
+			</div>
+		</div>
+	</section>
+    
+    <script src="js/jquery.min.js"></script>
+    <script src="js/popper.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+    <script src="js/main.js"></script>
+</body>
+    
+</html>

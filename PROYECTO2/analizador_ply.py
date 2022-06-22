@@ -1,23 +1,15 @@
 from ply.ply.yacc import yacc
 from ply.ply.lex import lex
 
+
 def getColumn(t):
   line_start = INPUT.rfind('\n', 0, t.lexpos) + 1
   return (t.lexpos-line_start)+1
 
 # Tokens
-
-reserved = (
-  'reservada_ini',
-  'reservada_fin'
-)
-
-tokens = reserved + (
-  
-  'numero',
-  'id',
-
+tokens = (
   #LEXEMAS DEL PROYECTO, AUN FALTA AGREGAR LO NUEVO
+  'tk_identificador',
   'tk_comentario_var_filas',
   'tk_tipo_int',
   'tk_tipo_double',
@@ -57,15 +49,9 @@ tokens = reserved + (
   'tk_dato_tipo_Int',
   'tk_dato_char',
   'tk_dato_string',
-  'tk_identificador',
+  
 )
 
-t_reservada_ini = r'INICIO'
-t_reservada_fin = r'FIN'
-t_numero = r'\d+'
-
-#LEXEMAS DEL PROYECTO, AUN FALTA AGREGAR LO NUEVO
-# t_tk_comentario_var_filas=r'' #falta
 t_tk_tipo_int=r'int'
 t_tk_tipo_double=r'double'
 t_tk_tipo_string=r'string'
@@ -98,18 +84,11 @@ t_tk_igualacion=r'=='
 t_tk_boolean_true=r'true'
 t_tk_boolean_false=r'false'
 t_tk_asignacion=r'='
-# t_tk_comentario_simple=r'' #falta
 t_tk_division=r'/'
-# t_tk_dato_double=r''       #falta
-# t_tk_dato_tipo_Int=r''  #falta
-# t_tk_dato_char=r'' #falta
-# t_tk_dato_string=r'' #falta
-t_tk_identificador=r'[a-zA-Z_][a-zA-Z0-9_]*' #falta
 
 
 # Lexemas ignorados
 t_ignore = ' \t\r\n'
-
 
 """
   t:
@@ -118,12 +97,33 @@ t_ignore = ' \t\r\n'
     - type: nombre del token
 """
 
-def t_id(t): # t_id
+def t_tk_identificador(t):
   r'[a-zA-Z_][a-zA-Z_0-9]*'
-
-  if t.value in reserved: t.type = t.value
-
+  if t.value in tokens: 
+    t.type = t.value
   return t
+
+def t_tk_dato_tipo_Int(t):
+  r'\d+'
+  if t.value in tokens: 
+    t.type = t.value
+  return t
+
+# def t_tk_comentario_var_filas(t): 
+#   pass
+
+# def t_tk_comentario_simple(t):
+#   pass 
+
+# def t_tk_dato_double(t):
+#   pass
+
+# def t_tk_dato_char(t):
+#   pass
+
+# def  t_tk_dato_string(t):
+#   pass 
+
 
 def t_newline(t):
   r'\n+'
@@ -138,21 +138,88 @@ lexer = lex()
 INPUT = r'''
 INICIO
 56*9-5/2552
-FIN
-int
-double
-string
-char
-boolean
-+ - * % != >= > <= <
-&& 
-|| ! ; if (){} else while do void  
-return == true false  === /
-
-hola
+FINm true false _identif
+$
 '''
 
 lexer.input(INPUT)
 
 for tok in lexer:
   print(tok)
+
+
+
+  #-------------------------------------------------
+
+
+# def getColumn(t):
+#   line_start = INPUT.rfind('\n', 0, t.lexpos) + 1
+#   return (t.lexpos-line_start)+1
+
+# # Tokens
+
+# reserved = (
+#   'reservada_inicio',
+#   'reservada_fin'
+# )
+
+# tokens = reserved + (
+#   'operador_suma',
+#   'operador_resata',
+#   'operador_multiplicacion',
+#   'operador_division',
+#   'operador_igualacion',
+#   'operador_resto',
+#   'numero',
+#   'id',
+# )
+
+# t_reservada_inicio = r'INICIO'
+# t_reservada_fin = r'FIN'
+# t_operador_suma = r'\+'
+# t_operador_resata = r'-'
+# t_operador_multiplicacion = r'\*'
+# t_operador_division = r'/'
+# t_operador_resto = r'%'
+# t_numero = r'\d+'
+
+# # Lexemas ignorados
+# t_ignore = ' \t\r\n'
+
+
+# """
+#   t:
+#     - lineno: numero de linea
+#     - value: valor del lexema
+#     - type: nombre del token
+# """
+
+# def t_id(t): # t_id
+#   r'[a-zA-Z_][a-zA-Z_0-9]*'
+
+#   if t.value in reserved: t.type = t.value
+
+#   return t
+
+# def t_newline(t):
+#   r'\n+'
+#   t.lexer.lineno+=len(t.value)
+
+# def t_error(t):
+#   print(t.lineno, getColumn(t), f"No se pudo reconocer el lexema '{t.value}'")
+#   t.lexer.skip(1)
+
+# lexer = lex()
+
+# INPUT = r'''
+# INICIO
+# 56*9-5/2552
+# FIN
+# prueba
+
+# '''
+
+# lexer.input(INPUT)
+
+# for tok in lexer:
+#   print(tok)
