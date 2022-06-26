@@ -4,7 +4,7 @@ from os import startfile
 def createHTML(contenido):
     file_exit = input('----->Ingrese el nombre del archivo de salida: ')
     print('\n')
-    file = open('P1/tabla_tokens/table-03/{}.html'.format(file_exit),
+    file = open('tabla_tokens/table-03/{}.html'.format(file_exit),
                 'w+', encoding='utf-8')
     
     #ESTRUCTURA HTML
@@ -56,15 +56,16 @@ def createHTML(contenido):
     """
     	
     # ? Contenido BODY HTML
+
     tokens = contenido["tokens"]
 
     for dato in tokens:
         body = body + f"""      <tr >
-                                    <td>{dato.row}</td>
-                                    <td>{dato.col}</td>
-                                    <td>{dato.lexema}</td>
-                                    <td>{dato.token}</td>
-                                    <td>{dato.patron}</td>
+                                    <td>{dato.lineno}</td>
+                                    <td>{dato.lexpos}</td>
+                                    <td>{dato.value}</td>
+                                    <td>{dato.type}</td>
+                                    <td>{dato}</td>
                                 </tr>"""
 
     body = body + f"""
@@ -78,93 +79,93 @@ def createHTML(contenido):
     """		
 
 #TABLA DE ESTADOS
-    if contenido['estados']:
-        body = body + f"""
-        <section class="ftco-section">
-            <div class="container">
-                <div class="row justify-content-center">
-                    <div class="col-md-6 text-center mb-5">
-                        <h2 class="heading-section">Reporte de Estados</h2>
-                    </div>
-                </div>
-        """
-        estados = contenido['estados']
-        for dato2 in estados:
-            body = body + f"""
-                <div class = "row" >
-                    <div class = "col-md-12" > 
-                        <div class = "table-wrap" >
-                            <table class = "table" >
-                                <thead class="thead-primary">
-                                <tr>
-                                    <th> Estado </th>
-                                    <th> Caracter </th>
-                                    <th> Lexema reconocido</th>
-                                    <th> Siguiente estado </th>
-                                </tr>
-                                </thead>
-            """
+    # if contenido['estados']:
+    #     body = body + f"""
+    #     <section class="ftco-section">
+    #         <div class="container">
+    #             <div class="row justify-content-center">
+    #                 <div class="col-md-6 text-center mb-5">
+    #                     <h2 class="heading-section">Reporte de Estados</h2>
+    #                 </div>
+    #             </div>
+    #     """
+    #     estados = contenido['estados']
+    #     for dato2 in estados:
+    #         body = body + f"""
+    #             <div class = "row" >
+    #                 <div class = "col-md-12" > 
+    #                     <div class = "table-wrap" >
+    #                         <table class = "table" >
+    #                             <thead class="thead-primary">
+    #                             <tr>
+    #                                 <th> Estado </th>
+    #                                 <th> Caracter </th>
+    #                                 <th> Lexema reconocido</th>
+    #                                 <th> Siguiente estado </th>
+    #                             </tr>
+    #                             </thead>
+    #         """
 
-            body = body + f"""
-                                <tbody>
-            """
+    #         body = body + f"""
+    #                             <tbody>
+    #         """
             
-        #Contenido BODY HTML
+    #     #Contenido BODY HTML
 
-            for x in dato2.estados:
-                body = body + f"""   
-                                    <tr >"""
-                for y in x:
-                    body = body + f""" 
-                                        <td> {y} </td>
-                                        """
-                body = body + f"""                       
+    #         for x in dato2.estados:
+    #             body = body + f"""   
+    #                                 <tr >"""
+    #             for y in x:
+    #                 body = body + f""" 
+    #                                     <td> {y} </td>
+    #                                     """
+    #             body = body + f"""                       
             
-                                    </tr>"""
+    #                                 </tr>"""
 
-            body = body + f"""
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </section>
-            """		
-
-
+    #         body = body + f"""
+    #                                 </tbody>
+    #                             </table>
+    #                         </div>
+    #                     </div>
+    #                 </div>
+    #             </div>
+    #         </section>
+    #         """		
 
 
 
-    #TABLA DE ERRORES
-    body = body + f"""
-	<section class="ftco-section">
-		<div class="container">
-			<div class="row justify-content-center">
-				<div class="col-md-6 text-center mb-5">
-					<h2 class="heading-section">Reporte de Errores</h2>
-				</div>
-			</div>
-    """
+
+
+    # #TABLA DE ERRORES
+    # body = body + f"""
+	# <section class="ftco-section">
+	# 	<div class="container">
+	# 		<div class="row justify-content-center">
+	# 			<div class="col-md-6 text-center mb-5">
+	# 				<h2 class="heading-section">Reporte de Errores</h2>
+	# 			</div>
+	# 		</div>
+    # """
     
-    body = body + f"""
-            <div class = "row" >
-                <div class = "col-md-12" > 
-                    <div class = "table-wrap" >
-                        <table class = "table" >
-                            <thead class="thead-primary">
-                            <tr>
-                                <th> Linea </th>
-                                <th> Columna</th>
-                                <th> Lexema</th>
+    # body = body + f"""
+    #         <div class = "row" >
+    #             <div class = "col-md-12" > 
+    #                 <div class = "table-wrap" >
+    #                     <table class = "table" >
+    #                         <thead class="thead-primary">
+    #                         <tr>
+    #                             <th> Linea </th>
+    #                             <th> Columna</th>
+    #                             <th> Lexema</th>
 
-                            </tr>
-                            </thead>
-    """
+    #                         </tr>
+    #                         </thead>
+    # """
 
-    body = body + f"""
-                            <tbody>
-    """
+    # body = body + f"""
+    #                         <tbody>
+    # """
     	
 
 
@@ -175,26 +176,26 @@ def createHTML(contenido):
 
 
 
-    # ? Contenido BODY HTML
-    errores = contenido["errores"]
+    # # ? Contenido BODY HTML
+    # errores = contenido["errores"]
 
-    for dato3 in errores:
-        body = body + f"""      <tr >
-                                    <td>{dato3.row}</td>
-                                    <td>{dato3.col}</td>
-                                    <td>{dato3.lexema}</td>
+    # for dato3 in errores:
+    #     body = body + f"""      <tr >
+    #                                 <td>{dato3.row}</td>
+    #                                 <td>{dato3.col}</td>
+    #                                 <td>{dato3.lexema}</td>
 
-                                </tr>"""
+    #                             </tr>"""
 
-    body = body + f"""
-                            </tbody>
-                        </table>
-                    </div>
-				</div>
-			</div>
-		</div>
-	</section>
-    """		
+    # body = body + f"""
+    #                         </tbody>
+    #                     </table>
+    #                 </div>
+	# 			</div>
+	# 		</div>
+	# 	</div>
+	# </section>
+    # """		
 
 #FIN DE LA TABLA 
   
@@ -212,7 +213,7 @@ def createHTML(contenido):
     file.write(body)
     file.close()
 
-    index = 'P1\\tabla_tokens\\table-03\\{}.html'.format(file_exit)
+    index = 'tabla_tokens\\table-03\\{}.html'.format(file_exit)
 
     startfile(index)
 

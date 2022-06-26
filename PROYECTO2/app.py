@@ -4,9 +4,14 @@ from analizador_ply import Lexico
 from crearhtml import  createHTML
 from ply.ply.lex import lex
 
+
 lexico= Lexico()
 
 report_html=createHTML
+
+
+
+
 print('\n','---------------------------------------------------', 'ANALIZADOR LÉXICO PARA SIMPLE C ','---------------------------------------------------')
 print('MENÚ PRINCIPAL','\n')
 contadorprocesos=0
