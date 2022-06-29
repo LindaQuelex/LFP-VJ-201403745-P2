@@ -9,22 +9,15 @@ def getColumn(t):
   line_start = INPUT.rfind('\n', 0, t.lexpos) + 1
   return (t.lexpos-line_start)+1
 
-exp_reg = {   #ingresar las expresiones regulares
-  'true': 'tk_boolean_true',
-  'false':'tk_boolean_false',
-  'int':  't_tk_tipo_int',
-  'double': 't_tk_tipo_double',
-  'string': 't_tk_tipo_string',
-  'char': 't_tk_tipo_char',
-  'boolean': 't_tk_tipo_boolean',
-  'else': 't_tk_condicional_else',
-  'while': 't_tk_iterativo_while',
-  'do': 't_tk_iterativo_do',
-  'void':'t_tk_reservda_void',
-  'return':'t_tk_reservada_return',
+exp_reg = {   
+  't_tk_dato_double':'\d+\.\d\d*',
+  't_tk_dato_tipo_Int':'\d+',
+  't_tk_identificador':'[a-zA-Z_][a-zA-Z_0-9]*',
+  't_tk_comentario_var_filas': '\/\*(.*\n*)*\*\/',
+  't_tk_comentario_simple':'\/\/.*',
+  't_tk_dato_char':'\'.{1}\'',
+  't_tk_dato_string':'\".*\"',
 }
-
-
 
 
 reserved = {
@@ -40,6 +33,8 @@ reserved = {
   'do': 't_tk_iterativo_do',
   'void':'t_tk_reservda_void',
   'return':'t_tk_reservada_return',
+  'break':'t_tk_break',
+  'continue':'t_tk_continue',
 }
 
 tokens = (
@@ -82,6 +77,8 @@ tokens = (
   'tk_dato_char',
   'tk_dato_string',
   'tk_identificador',
+  'tk_break',
+  'tk_continue',
 ) + tuple(reserved.values())
 
 t_tk_tipo_int=r'int'
@@ -130,9 +127,10 @@ t_ignore = ' \t\r'
 #Expresiones regulares para AFD
 
 def t_tk_dato_double(t):
-  r'\d+.\d\d*'
+  r'\d+\.\d\d*'
   if t.value in tokens: 
     t.type = t.value
+    
   return t
 
 def t_tk_dato_tipo_Int(t):
@@ -145,6 +143,9 @@ def t_tk_identificador(t):
   r'[a-zA-Z_][a-zA-Z_0-9]*'
   if t.value in reserved.keys():
     t.type = reserved[t.value]
+    if '[a-zA-Z_][a-zA-Z_0-9]*' in exp_reg.values():
+      er = exp_reg.get('t_tk_identificador')
+    
   return t
 
 def t_tk_comentario_var_filas(t): 
@@ -166,7 +167,7 @@ def t_tk_dato_char(t):
   return t
 
 def  t_tk_dato_string(t):
-  r'\".*\"'   # corregir no puede aceptar " dentro de las comillas del string
+  r'\".*\"'   
   if t.value in tokens: 
     t.type = t.value
   return t
@@ -180,8 +181,6 @@ def t_error(t):
   t.lexer.skip(1)
 
 lexer = lex()
-
-
 
 
 #ANÁLISIS SINTÁCTICO
@@ -252,11 +251,9 @@ lexer = lex()
 #     print("Ninguna instrucción válida")
 
 
-
 # parser = yacc(start='INITIAL')
 # # lexer.lex(reflags=re.IGNORECASE)  # case insensitive
-
-                           
+       
 
 
 #MENÚ
@@ -294,8 +291,9 @@ while contadorprocesos>=0:
 
             # ENVIAR CONTENIDO AL ANALIZADOR LÉXICO
             lexer.input(INPUT.lower())
+            lista_tokens=list()
             for tok in lexer:
-              lista_tokens=list()
+           
               lista_tokens.append(tok)
               print("lista de tokens",lista_tokens)
               # print(tok)

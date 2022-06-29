@@ -65,7 +65,7 @@ def createHTML(contenido):
                                     <td>{dato.lexpos}</td>
                                     <td>{dato.value}</td>
                                     <td>{dato.type}</td>
-                                    <td>{dato}</td>
+                                    <td>exp_reg</td>
                                 </tr>"""
 
     body = body + f"""
