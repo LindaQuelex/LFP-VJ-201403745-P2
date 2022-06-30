@@ -20,7 +20,6 @@
     - [1.2.1. Precedencia](#121-precedencia)
     - [1.2.2. Producciones](#122-producciones)
   - [7. Utilización de PLY para el análsis léxico y sintáctico](#7-utilización-de-ply-para-el-análsis-léxico-y-sintáctico)
-  - [8. Archivos de salida](#8-archivos-de-salida)
 
 
 # MANUAL TÉCNICO 
@@ -338,28 +337,157 @@ Precedencia de operadores de más a menos:
 
 ### 1.2.2. Producciones
 ```ru
+
 Símbolo inicial = INITIAL
 
-INITIAL : reservada_inicio EXPRESSIONS reservada_fin
+INITIAL : INSTRUCCIONES
 
-EXPRESSIONS : EXPRESSIONS E
-            | E
+INSTRUCCIONES : INSTRUCCIONES INSTRUCCIONES2
+              | INSTRUCCIONES2
 
-E : E operador_suma E
-  | E operador_resta E
-  | E operador_multiplicacion E
-  | E operador_division E
-  | E operador_resto E
-  | id
-  | numero
+INSTRUCCIONES2 : tk_reservda_void tk_identificador tk_par_abierto tk_par_cerrado tk_llave_abierta tk_llave_cerrada 
+                  |tk_reservda_void tk_par_abierto INSTRUCCIONES3 tk_par_cerrado tk_llave_abierta tk_llave_cerrada
+                  |tk_reservda_void tk_identificador tk_par_abierto INSTRUCCIONES3 tk_par_cerrado tk_llave_abierta INSTRUCCIONES4 tk_llave_cerrada
+                  |INSTRUCCIONES4
+
+INSTRUCCIONES4 : INSTRUCCIONES4 INST5
+            | INST5
+
+INST5 : DECLARACION_VAR
+        | ASIG
+
+
+DECLARACION_VAR : DECLARACION_VAR DESCRIPCION
+                | DESCRIPCION
+
+DESCRIPCION : tk_dato_tipo_Int tk_identificador tk_asignacion tk_tipo_int tk_punto_coma
+              | tk_dato_double tk_identificador tk_asignacion tk_tipo_double tk_punto_coma
+              | tk_dato_string tk_identificador tk_asignacion tk_tipo_string tk_punto_coma
+              | tk_dato_char tk_identificador tk_asignacion tk_tipo_char tk_punto_coma
+              | tk_tipo_boolean tk_identificador tk_asignacion tk_boolean_true tk_punto_coma
+              | tk_tipo_boolean tk_identificador tk_asignacion tk_boolean_false tk_punto_coma
+
+ASIG : ASIG DESCRIPCION_2
+      | DESCRIPCION_2
+
+
+DESCRIPCION_2 :  tk_identificador tk_asignacion tk_tipo_int tk_punto_coma
+              | tk_identificador tk_asignacion tk_tipo_double tk_punto_coma
+              | tk_identificador tk_asignacion tk_tipo_string tk_punto_coma
+              | tk_identificador tk_asignacion tk_tipo_char tk_punto_coma
+              | tk_identificador tk_asignacion tk_boolean_true tk_punto_coma
+              | tk_identificador tk_asignacion tk_boolean_false tk_punto_coma              
+
+
+
+INSTRUCCIONES3 : INSTRUCCIONES3  tk_punto_coma DESCRIPCION_3
+            | DESCRIPCION_3
+
+
+DESCRIPCION_3 : tk_dato_tipo_Int tk_identificador
+        | tk_dato_string tk_identificador
+
+
+
+
+
+VERSIÓN 2
+
+
+INITIAL : INSTRUCCIONES
+
+INSTRUCCIONES : INSTRUCCIONES INSTRUCCIONES2
+              | INSTRUCCIONES2
+
+INSTRUCCIONES2 : METODOS
+               | FUNCIONES
+               | OTROS
+
+METODOS : METODOS METODO
+          | METODO 
+
+METODO: METHOD_VOID ID LPAREN RPAREN LKEY empty RKEY 
+               | METHOD_VOID ID LPAREN RPAREN LKEY SENTENCES_METHOD RKEY
+               | METHOD_VOID ID LPAREN L_PARAMS RPAREN LKEY empty RKEY
+               | METHOD_VOID ID LPAREN L_PARAMS RPAREN LKEY SENTENCES_METHOD RKEY
+
+
+SENTENCES_METHOD : SENTENCES_METHOD SENTENCE_METHOD
+                | SENTENCE_METHOD
+
+
+SENTENCE_METHOD : DECLARATIONS
+                | ASSIGNMENTS
+                | SENTENCES_IF
+                | METHOD_RETURN DOT_AN_DCOMMA
+
+ FUNTIONS : FUNTIONS FUNTION
+                | FUNTION 
+
+ FUNTION : TYPE_INT COUPLER
+                | TYPE_DOUBLE COUPLER
+                | TYPE_STRING COUPLER
+                | TYPE_CHAR COUPLER
+                | TYPE_BOOL COUPLER
+
+
+ COUPLER : ID LPAREN RPAREN LKEY empty RKEY 
+                | ID LPAREN RPAREN LKEY SENTENCES_FUNTION RKEY
+                | ID LPAREN L_PARAMS RPAREN LKEY empty RKEY
+                | ID LPAREN L_PARAMS RPAREN LKEY SENTENCES_FUNTION RKEY
+
+
+SENTENCES_FUNTION : SENTENCES_FUNTION SENTENCE_FUNTION
+                          | SENTENCE_FUNTION
+
+
+SENTENCE_FUNTION : DECLARATIONS
+                         | ASSIGNMENTS
+                         | METHOD_RETURN TYPE_DATO DOT_AN_DCOMMA
+                         | METHOD_RETURN ID DOT_AN_DCOMMA
+
+SENTENCES_IF : SENTENCES_IF SENTENCE_IF
+              | SENTENCE_IF
+
+
+SENTENCE_IF : CONDITIONAL_IF LPAREN OPTIONS RPAREN LKEY SENTENCES RKEY
+
+
+OPTIONS : OPTIONS OPTION
+                | OPTION
+
+
+OPTION : OPTION IQUALS OPTION
+               | OPTION DIFFERENT OPTION
+               | OPTION IQUAL_GREATER OPTION
+               | OPTION IQUAL_LESS OPTION
+               | OPTION AND OPTION
+               | OPTION OR OPTION
+               | OPTION NOT OPTION
+               | OPTION GREATER OPTION
+               | OPTION LESS OPTION
+               | ID
+               | TYPE_DATO
+
+
+
+SENTENCES : SENTENCES SENTENCE
+                  | SENTENCE
+
+
+ SENTENCE : DECLARATIONS
+                 | ASSIGNMENTS
+
+DECLARATIONS : DECLARATIONS DECLARATION
+                     | DECLARATION
+
+
+DECLARATION : TYPE_INT ID IQUAL INT DOT_AN_DCOMMA
+                    | TYPE_DOUBLE ID IQUAL FLOAT DOT_AN_DCOMMA
+                    | TYPE_STRING ID IQUAL STRING DOT_AN_DCOMMA
+                    | TYPE_CHAR ID IQUAL CHAR DOT_AN_DCOMMA
+                    | TYPE_BOOL ID IQUAL DATA_BOOL DOT_AN_DCOMMA
 ```
-
-
-
-
-
-
-
 
 
 
@@ -381,7 +509,16 @@ E : E operador_suma E
   | t_tk_dato_string          | \".*\"                 |
 
 
-* yacc.py: se utiliza para analizar la sintaxis del lenguaje, la sintaxis generalmente se especifica en términos de una gramática BNF. Por ejemplo, si quisiera analizar expresiones aritméticas simples, primero podría escribir una especificación gramatical inequívoca. 
+* yacc.py: se utiliza para analizar la sintaxis del lenguaje, la sintaxis generalmente se especifica en términos de una gramática BNF. Por ejemplo, si quisiera analizar expresiones aritméticas simples, primero podría escribir una especificación gramatical inequívoca, ejemplo de implementación: 
+  
+```
+def p_INSTRUCCIONES2(p):
+  '''
+  INSTRUCCIONES2 : tk_reservda_void tk_identificador tk_par_abierto tk_par_cerrado tk_llave_abierta tk_llave_cerrada 
+                  |tk_reservda_void tk_par_abierto INSTRUCCIONES3 tk_par_cerrado tk_llave_abierta tk_llave_cerrada
+                  |tk_reservda_void tk_identificador tk_par_abierto INSTRUCCIONES3 tk_par_cerrado tk_llave_abierta INSTRUCCIONES4 tk_llave_cerrada
+                  |INSTRUCCIONES4
+```
 
 
-  ## 8. Archivos de salida
+

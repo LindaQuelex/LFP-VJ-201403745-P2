@@ -240,7 +240,6 @@ def p_INSTRUCCIONES4(p):
   else:
     p[0] = [p[1]]
 
-
 def p_INST5(p):
   '''
   INST5 : DECLARACION_VAR
@@ -373,8 +372,7 @@ while contadorprocesos>=0:
             ast = parser.parse(INPUT, lexer)
             print('SALIDA ANÁLISIS SINTÁCTICO:-------->',json.dumps(ast, indent=4, sort_keys=False))
           
-            
-
+          
 
             # #GENERAR REPORTE
             report_html=createHTML(dt)

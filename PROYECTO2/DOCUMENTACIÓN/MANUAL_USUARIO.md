@@ -6,7 +6,8 @@
 * 201403745
 
 
-# Modo de uso del Analizador léxico
+# Modo de uso del Analizador léxico y sintáctico
+
 -  PASO 1: Al ejecutar la apliación se mostrará la siguiente pantalla, que pregunta si desea iniciar el analizador léxico, al cual debe ingresar "si" en minúsculas, para pasar al paso 2.
 <p><img src="PASO1.png" alt="diagramas" /></p>
 
@@ -37,3 +38,4 @@
 
 - PASO 10: La aplicación de brinda la opción de inicar un nuevo proceso, el cual si responde "no", le preguntará si desea salir de la aplición, si responde "si", se cerrará la aplicación.
 <p><img src="PASO10.png" alt="diagramas" /></p>
+
