@@ -6,9 +6,9 @@ _tabversion = '3.10'
 
 _lr_method = 'LALR'
 
-_lr_signature = 'INITIALleftoperador_sumaoperador_restaleftoperador_multiplicacionoperador_divisionoperador_restoid numero operador_division operador_multiplicacion operador_resta operador_resto operador_suma reservada_fin reservada_inicio\n  INITIAL : reservada_inicio EXPRESSIONS reservada_fin\n  \n  EXPRESSIONS : EXPRESSIONS E\n              | E\n  \n  E : E operador_suma E\n    | E operador_resta E\n    | E operador_multiplicacion E\n    | E operador_division E\n    | E operador_resto E\n    | id\n    | numero\n  '
+_lr_signature = 'INITIALlefttk_sumatk_restalefttk_multiplicaciontk_divisiontk_restolefttk_par_abiertotk_par_cerradot_tk_break t_tk_condicional_else t_tk_continue t_tk_iterativo_do t_tk_iterativo_while t_tk_reservada_return t_tk_reservda_void t_tk_tipo_boolean t_tk_tipo_char t_tk_tipo_double t_tk_tipo_int t_tk_tipo_string tk_and tk_asignacion tk_boolean_false tk_boolean_true tk_break tk_comentario_simple tk_comentario_var_filas tk_condicional tk_condicional_else tk_continue tk_dato_char tk_dato_double tk_dato_string tk_dato_tipo_Int tk_diferenciacion tk_division tk_identificador tk_igualacion tk_iterativo_do tk_iterativo_while tk_llave_abierta tk_llave_cerrada tk_mayor_o_igual_que tk_mayor_que tk_menor_o_igual_que tk_menor_que tk_multiplicacion tk_not tk_or tk_par_abierto tk_par_cerrado tk_punto_coma tk_reservada_return tk_reservda_void tk_resta tk_resto tk_suma tk_tipo_boolean tk_tipo_char tk_tipo_double tk_tipo_int tk_tipo_string\n  INITIAL : INSTRUCCIONES\n  \n  INSTRUCCIONES : INSTRUCCIONES INSTRUCCIONES2\n                | INSTRUCCIONES2\n  \n  INSTRUCCIONES2 : tk_reservda_void tk_identificador tk_par_abierto tk_par_cerrado tk_llave_abierta tk_llave_cerrada \n                  \n  \n  INSTRUCCIONES4 : INSTRUCCIONES4 INST5\n            | INST5\n  \n  INST5 : DECLARACION_VAR\n        | ASIG\n  \n  DECLARACION_VAR : DECLARACION_VAR DESCRIPCION\n                | DESCRIPCION\n  \n  DESCRIPCION : tk_dato_tipo_Int tk_identificador tk_asignacion tk_tipo_int tk_punto_coma\n              | tk_dato_double tk_identificador tk_asignacion tk_tipo_double tk_punto_coma\n              | tk_dato_string tk_identificador tk_asignacion tk_tipo_string tk_punto_coma\n              | tk_dato_char tk_identificador tk_asignacion tk_tipo_char tk_punto_coma\n              | tk_tipo_boolean tk_identificador tk_asignacion tk_boolean_true tk_punto_coma\n              | tk_tipo_boolean tk_identificador tk_asignacion tk_boolean_false tk_punto_coma\n  \n  ASIG : ASIG DESCRIPCION_2\n              | DESCRIPCION_2\n  \n  DESCRIPCION_2 :  tk_identificador tk_asignacion tk_tipo_int tk_punto_coma\n              | tk_identificador tk_asignacion tk_tipo_double tk_punto_coma\n              | tk_identificador tk_asignacion tk_tipo_string tk_punto_coma\n              | tk_identificador tk_asignacion tk_tipo_char tk_punto_coma\n              | tk_identificador tk_asignacion tk_boolean_true tk_punto_coma\n              | tk_identificador tk_asignacion tk_boolean_false tk_punto_coma\n  \n  INSTRUCCIONES3 : INSTRUCCIONES3  tk_punto_coma DESCRIPCION_3\n            | DESCRIPCION_3\n  \n  DESCRIPCION_3 : tk_dato_tipo_Int tk_identificador\n        | tk_dato_string tk_identificador\n  '
     
-_lr_action_items = {'reservada_inicio':([0,],[2,]),'$end':([1,7,],[0,-1,]),'id':([2,3,4,5,6,8,9,10,11,12,13,14,15,16,17,18,],[5,5,-3,-9,-10,-2,5,5,5,5,5,-4,-5,-6,-7,-8,]),'numero':([2,3,4,5,6,8,9,10,11,12,13,14,15,16,17,18,],[6,6,-3,-9,-10,-2,6,6,6,6,6,-4,-5,-6,-7,-8,]),'reservada_fin':([3,4,5,6,8,14,15,16,17,18,],[7,-3,-9,-10,-2,-4,-5,-6,-7,-8,]),'operador_suma':([4,5,6,8,14,15,16,17,18,],[9,-9,-10,9,-4,-5,-6,-7,-8,]),'operador_resta':([4,5,6,8,14,15,16,17,18,],[10,-9,-10,10,-4,-5,-6,-7,-8,]),'operador_multiplicacion':([4,5,6,8,14,15,16,17,18,],[11,-9,-10,11,11,11,-6,-7,-8,]),'operador_division':([4,5,6,8,14,15,16,17,18,],[12,-9,-10,12,12,12,-6,-7,-8,]),'operador_resto':([4,5,6,8,14,15,16,17,18,],[13,-9,-10,13,13,13,-6,-7,-8,]),}
+_lr_action_items = {'tk_reservda_void':([0,2,3,5,10,],[4,4,-3,-2,-4,]),'$end':([1,2,3,5,10,],[0,-1,-3,-2,-4,]),'tk_identificador':([4,],[6,]),'tk_par_abierto':([6,],[7,]),'tk_par_cerrado':([7,],[8,]),'tk_llave_abierta':([8,],[9,]),'tk_llave_cerrada':([9,],[10,]),}
 
 _lr_action = {}
 for _k, _v in _lr_action_items.items():
@@ -17,7 +17,7 @@ for _k, _v in _lr_action_items.items():
       _lr_action[_x][_k] = _y
 del _lr_action_items
 
-_lr_goto_items = {'INITIAL':([0,],[1,]),'EXPRESSIONS':([2,],[3,]),'E':([2,3,9,10,11,12,13,],[4,8,14,15,16,17,18,]),}
+_lr_goto_items = {'INITIAL':([0,],[1,]),'INSTRUCCIONES':([0,],[2,]),'INSTRUCCIONES2':([0,2,],[3,5,]),}
 
 _lr_goto = {}
 for _k, _v in _lr_goto_items.items():
@@ -27,14 +27,32 @@ for _k, _v in _lr_goto_items.items():
 del _lr_goto_items
 _lr_productions = [
   ("S' -> INITIAL","S'",1,None,None,None),
-  ('INITIAL -> reservada_inicio EXPRESSIONS reservada_fin','INITIAL',3,'p_INITIAL','prueba.py',74),
-  ('EXPRESSIONS -> EXPRESSIONS E','EXPRESSIONS',2,'p_EXPRESSIONS','prueba.py',80),
-  ('EXPRESSIONS -> E','EXPRESSIONS',1,'p_EXPRESSIONS','prueba.py',81),
-  ('E -> E operador_suma E','E',3,'p_E','prueba.py',91),
-  ('E -> E operador_resta E','E',3,'p_E','prueba.py',92),
-  ('E -> E operador_multiplicacion E','E',3,'p_E','prueba.py',93),
-  ('E -> E operador_division E','E',3,'p_E','prueba.py',94),
-  ('E -> E operador_resto E','E',3,'p_E','prueba.py',95),
-  ('E -> id','E',1,'p_E','prueba.py',96),
-  ('E -> numero','E',1,'p_E','prueba.py',97),
+  ('INITIAL -> INSTRUCCIONES','INITIAL',1,'p_INITIAL','analizador_ply.py',200),
+  ('INSTRUCCIONES -> INSTRUCCIONES INSTRUCCIONES2','INSTRUCCIONES',2,'p_INSTRUCCIONES','analizador_ply.py',207),
+  ('INSTRUCCIONES -> INSTRUCCIONES2','INSTRUCCIONES',1,'p_INSTRUCCIONES','analizador_ply.py',208),
+  ('INSTRUCCIONES2 -> tk_reservda_void tk_identificador tk_par_abierto tk_par_cerrado tk_llave_abierta tk_llave_cerrada','INSTRUCCIONES2',6,'p_INSTRUCCIONES2','analizador_ply.py',218),
+  ('INSTRUCCIONES4 -> INSTRUCCIONES4 INST5','INSTRUCCIONES4',2,'p_INSTRUCCIONES4','analizador_ply.py',232),
+  ('INSTRUCCIONES4 -> INST5','INSTRUCCIONES4',1,'p_INSTRUCCIONES4','analizador_ply.py',233),
+  ('INST5 -> DECLARACION_VAR','INST5',1,'p_INST5','analizador_ply.py',244),
+  ('INST5 -> ASIG','INST5',1,'p_INST5','analizador_ply.py',245),
+  ('DECLARACION_VAR -> DECLARACION_VAR DESCRIPCION','DECLARACION_VAR',2,'p_DECLARACION_VAR','analizador_ply.py',251),
+  ('DECLARACION_VAR -> DESCRIPCION','DECLARACION_VAR',1,'p_DECLARACION_VAR','analizador_ply.py',252),
+  ('DESCRIPCION -> tk_dato_tipo_Int tk_identificador tk_asignacion tk_tipo_int tk_punto_coma','DESCRIPCION',5,'p_DESCRIPCION','analizador_ply.py',262),
+  ('DESCRIPCION -> tk_dato_double tk_identificador tk_asignacion tk_tipo_double tk_punto_coma','DESCRIPCION',5,'p_DESCRIPCION','analizador_ply.py',263),
+  ('DESCRIPCION -> tk_dato_string tk_identificador tk_asignacion tk_tipo_string tk_punto_coma','DESCRIPCION',5,'p_DESCRIPCION','analizador_ply.py',264),
+  ('DESCRIPCION -> tk_dato_char tk_identificador tk_asignacion tk_tipo_char tk_punto_coma','DESCRIPCION',5,'p_DESCRIPCION','analizador_ply.py',265),
+  ('DESCRIPCION -> tk_tipo_boolean tk_identificador tk_asignacion tk_boolean_true tk_punto_coma','DESCRIPCION',5,'p_DESCRIPCION','analizador_ply.py',266),
+  ('DESCRIPCION -> tk_tipo_boolean tk_identificador tk_asignacion tk_boolean_false tk_punto_coma','DESCRIPCION',5,'p_DESCRIPCION','analizador_ply.py',267),
+  ('ASIG -> ASIG DESCRIPCION_2','ASIG',2,'p_ASIG','analizador_ply.py',273),
+  ('ASIG -> DESCRIPCION_2','ASIG',1,'p_ASIG','analizador_ply.py',274),
+  ('DESCRIPCION_2 -> tk_identificador tk_asignacion tk_tipo_int tk_punto_coma','DESCRIPCION_2',4,'p_DESCRIPCION_2','analizador_ply.py',284),
+  ('DESCRIPCION_2 -> tk_identificador tk_asignacion tk_tipo_double tk_punto_coma','DESCRIPCION_2',4,'p_DESCRIPCION_2','analizador_ply.py',285),
+  ('DESCRIPCION_2 -> tk_identificador tk_asignacion tk_tipo_string tk_punto_coma','DESCRIPCION_2',4,'p_DESCRIPCION_2','analizador_ply.py',286),
+  ('DESCRIPCION_2 -> tk_identificador tk_asignacion tk_tipo_char tk_punto_coma','DESCRIPCION_2',4,'p_DESCRIPCION_2','analizador_ply.py',287),
+  ('DESCRIPCION_2 -> tk_identificador tk_asignacion tk_boolean_true tk_punto_coma','DESCRIPCION_2',4,'p_DESCRIPCION_2','analizador_ply.py',288),
+  ('DESCRIPCION_2 -> tk_identificador tk_asignacion tk_boolean_false tk_punto_coma','DESCRIPCION_2',4,'p_DESCRIPCION_2','analizador_ply.py',289),
+  ('INSTRUCCIONES3 -> INSTRUCCIONES3 tk_punto_coma DESCRIPCION_3','INSTRUCCIONES3',3,'p_INSTRUCCIONES3','analizador_ply.py',297),
+  ('INSTRUCCIONES3 -> DESCRIPCION_3','INSTRUCCIONES3',1,'p_INSTRUCCIONES3','analizador_ply.py',298),
+  ('DESCRIPCION_3 -> tk_dato_tipo_Int tk_identificador','DESCRIPCION_3',2,'p_DESCRIPCION_3','analizador_ply.py',309),
+  ('DESCRIPCION_3 -> tk_dato_string tk_identificador','DESCRIPCION_3',2,'p_DESCRIPCION_3','analizador_ply.py',310),
 ]

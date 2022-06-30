@@ -2,6 +2,8 @@ from ply.ply.yacc import yacc
 from ply.ply.lex import lex
 import os
 from crearhtml import  createHTML
+import json
+
 
 #ANÁLISIS LÉXICO
 
@@ -116,7 +118,7 @@ t_tk_asignacion=r'='
 t_tk_division=r'/'
 
 # Lexemas ignorados
-t_ignore = ' \t\r'
+t_ignore = ' \t'
 
 """
   t:
@@ -143,8 +145,8 @@ def t_tk_identificador(t):
   r'[a-zA-Z_][a-zA-Z_0-9]*'
   if t.value in reserved.keys():
     t.type = reserved[t.value]
-    if '[a-zA-Z_][a-zA-Z_0-9]*' in exp_reg.values():
-      er = exp_reg.get('t_tk_identificador')
+    # if '[a-zA-Z_][a-zA-Z_0-9]*' in exp_reg.values():
+    #   er = exp_reg.get('t_tk_identificador')
     
   return t
 
@@ -161,13 +163,13 @@ def t_tk_comentario_simple(t):
   return t
 
 def t_tk_dato_char(t):
-  r'\'.{1}\''
+  r'\'([^\\\n]|(\\.))?\''
   if t.value in tokens: 
     t.type = t.value
   return t
 
 def  t_tk_dato_string(t):
-  r'\".*\"'   
+  r'\"([^\\\n]|(\\.))*?\"'   
   if t.value in tokens: 
     t.type = t.value
   return t
@@ -185,76 +187,142 @@ lexer = lex()
 
 #ANÁLISIS SINTÁCTICO
 
+precedence = (
+  ('left','tk_suma','tk_resta'),
+  ('left','tk_multiplicacion','tk_division','tk_resto'),
+  ('left', 'tk_par_abierto', 'tk_par_cerrado'), 
+)
+
+# Producciones
+
+def p_INITIAL(p):
+  '''
+  INITIAL : INSTRUCCIONES
+  '''
+  p[0] = p[1]
+  print(p[0])
+
+def p_INSTRUCCIONES(p):
+  '''
+  INSTRUCCIONES : INSTRUCCIONES INSTRUCCIONES2
+                | INSTRUCCIONES2
+  '''
+  if len(p) == 3:
+    p[0] = p[1]
+    p[0].append(p[2])
+  else:
+    p[0] = [p[1]]
+
+def p_INSTRUCCIONES2(p):
+  '''
+  INSTRUCCIONES2 : tk_reservda_void tk_identificador tk_par_abierto tk_par_cerrado tk_llave_abierta tk_llave_cerrada 
+                  |tk_reservda_void tk_par_abierto INSTRUCCIONES3 tk_par_cerrado tk_llave_abierta tk_llave_cerrada
+                  |tk_reservda_void tk_identificador tk_par_abierto INSTRUCCIONES3 tk_par_cerrado tk_llave_abierta INSTRUCCIONES4 tk_llave_cerrada
+                  |INSTRUCCIONES4
+  '''
+  if len(p) == 2:
+    p[0] = p[1]
+  elif len(p) == 7:
+    p[0] = p[1],  p[2]
+  elif len(p) == 8:
+    p[0] =  p[1], p[2],  p[4]
+  elif len(p) == 9:
+    p[0] =  p[1],  p[2], p[4], p[7]
+  
+def p_INSTRUCCIONES4(p):
+  '''
+  INSTRUCCIONES4 : INSTRUCCIONES4 INST5
+            | INST5
+  '''
+  if len(p) == 3:
+    p[0] = p[1]
+    p[0].append(p[2])
+  else:
+    p[0] = [p[1]]
 
 
-# precedence = (
-#   ('left','operador_suma','operador_resta'),
-#   ('left','operador_multiplicacion','operador_division','operador_resto')
-# )
+def p_INST5(p):
+  '''
+  INST5 : DECLARACION_VAR
+        | ASIG
+  '''
+  p[0] = p[1]
+        
+def p_DECLARACION_VAR(p):
+  '''
+  DECLARACION_VAR : DECLARACION_VAR DESCRIPCION
+                | DESCRIPCION
+  '''
+  if len(p) == 3:
+    p[0] = p[1]
+    p[0].append(p[2])
+  else:
+    p[0] = [p[1]]
+    
+def p_DESCRIPCION(p):
+  '''
+  DESCRIPCION : tk_dato_tipo_Int tk_identificador tk_asignacion tk_tipo_int tk_punto_coma
+              | tk_dato_double tk_identificador tk_asignacion tk_tipo_double tk_punto_coma
+              | tk_dato_string tk_identificador tk_asignacion tk_tipo_string tk_punto_coma
+              | tk_dato_char tk_identificador tk_asignacion tk_tipo_char tk_punto_coma
+              | tk_tipo_boolean tk_identificador tk_asignacion tk_boolean_true tk_punto_coma
+              | tk_tipo_boolean tk_identificador tk_asignacion tk_boolean_false tk_punto_coma
+  '''
+  p[0] = {'Tipo Dato': p[1], 'ID': p[2],'Dato': {'Dato Tipo': p.slice[4].type, 'valor':p[4]}}
 
-# """
-# ASOCIATIVIDAD IZQUIERDA (left)
-# ((5 + 5) + 5)
-# ((5 ^ 5) ^ 5)
-# ASOCIATIVIDAD DERECHA (right)
-# (5 + (5 + 5))
-# (5 ^ (5 ^ 5))
-# """
-
-# """
-# p[0] : Lado izquierdo de la producción
-# p[1+] : Lado derecho de la producción
-# Lo que habrá en los elementos del lado derecho será:
-# - Un token si es un símbolo terminal
-# - Lo que regresemos de su producción si es un símbolo no terminal
-# Para retornar algo de una producción se debe asignar a p[0]
-# """
-
-# # Producciones
-# def p_INITIAL(p):
-#   '''
-#   INITIAL : reservada_inicio EXPRESSIONS reservada_fin
-#   '''
-#   p[0] = p[2]
-
-# def p_EXPRESSIONS(p):
-#   '''
-#   EXPRESSIONS : EXPRESSIONS E
-#               | E
-#   '''
-#   if len(p)==3:
-#     p[0] = p[1]
-#     p[0].append(p[2])
-#   else:
-#     p[0] = [p[1]]
-
-# def p_E(p):
-#   '''
-#   E : E operador_suma E
-#     | E operador_resta E
-#     | E operador_multiplicacion E
-#     | E operador_division E
-#     | E operador_resto E
-#     | id
-#     | numero
-#   '''
-#   if len(p)==2:
-#     p[0] = {"linea": p.lexer.lineno, "columna": getColumn(p.lexer), "valor": p[1]}
-#   else:
-#     p[0] = {"linea": p.lexer.lineno, "columna": getColumn(p.lexer), "operacion": p[2], "izquierda": p[1], "derecha": p[3]}
-
-# def p_error(p):
-#   print(p)
-#   if p:
-#     print(f"Sintaxis no válida cerca de '{p.value}' ({p.type})")
-#   else:
-#     print("Ninguna instrucción válida")
+def p_ASIG(p):
+  '''
+  ASIG : ASIG DESCRIPCION_2
+              | DESCRIPCION_2
+  '''
+  if len(p) == 3:
+    p[0] = p[1]
+    p[0].append(p[2])
+  else:
+    p[0] = [p[1]]
+    
+def p_DESCRIPCION_2(p):
+  '''
+  DESCRIPCION_2 :  tk_identificador tk_asignacion tk_tipo_int tk_punto_coma
+              | tk_identificador tk_asignacion tk_tipo_double tk_punto_coma
+              | tk_identificador tk_asignacion tk_tipo_string tk_punto_coma
+              | tk_identificador tk_asignacion tk_tipo_char tk_punto_coma
+              | tk_identificador tk_asignacion tk_boolean_true tk_punto_coma
+              | tk_identificador tk_asignacion tk_boolean_false tk_punto_coma
+  '''
+  p[0] = {'ID': p[1],
+          'Dato': {'Dato Tipo': p.slice[3].type, 'valor': p[3]}}        
 
 
-# parser = yacc(start='INITIAL')
-# # lexer.lex(reflags=re.IGNORECASE)  # case insensitive
-       
+def p_INSTRUCCIONES3(p):
+  '''
+  INSTRUCCIONES3 : INSTRUCCIONES3  tk_punto_coma DESCRIPCION_3
+            | DESCRIPCION_3
+  '''
+  if len(p) == 4:
+    p[0] = p[1]
+    cosnt = p[2] + p[3]
+    p[0].append(cosnt)
+  else:
+    p[0] = [p[1]]
 
+def p_DESCRIPCION_3(p):
+  '''
+  DESCRIPCION_3 : tk_dato_tipo_Int tk_identificador
+        | tk_dato_string tk_identificador
+  '''
+  if len(p) == 3:
+    p[0] = {"tipo dato": p[1], "id": p[2]}
+
+    
+def p_error(p):
+  print(p)
+  if p:
+    print(f"Sintaxis no válida cerca de '{p.value}' ({p.type})")
+  else:
+    print("Ninguna instrucción válida")
+
+parser = yacc(start='INITIAL')
 
 #MENÚ
 report_html=createHTML
@@ -295,13 +363,19 @@ while contadorprocesos>=0:
             for tok in lexer:
            
               lista_tokens.append(tok)
-              print("lista de tokens",lista_tokens)
+              #print("lista de tokens",lista_tokens)
               # print(tok)
               dt = {
                     'tokens':lista_tokens}
-            print("dict-------",dt)
+            #print("dict-------",dt)
               # print(lexer[tok])
               
+            ast = parser.parse(INPUT, lexer)
+            print('SALIDA ANÁLISIS SINTÁCTICO:-------->',json.dumps(ast, indent=4, sort_keys=False))
+          
+            
+
+
             # #GENERAR REPORTE
             report_html=createHTML(dt)
     except: 
