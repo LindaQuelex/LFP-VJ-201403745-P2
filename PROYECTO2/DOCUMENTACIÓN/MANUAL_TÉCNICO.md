@@ -508,6 +508,22 @@ DECLARATION : TYPE_INT ID IQUAL INT DOT_AN_DCOMMA
   | t_tk_dato_char            | \'.{1}\'               |
   | t_tk_dato_string          | \".*\"                 |
 
+Ejemplo de implementación: 
+
+```
+def t_tk_dato_double(t):
+  r'\d+\.\d\d*'
+  if t.value in tokens: 
+    t.type = t.value
+    
+  return t
+
+def t_tk_dato_tipo_Int(t):
+  r'\d+'
+  if t.value in tokens: 
+    t.type = t.value
+  return t
+```
 
 * yacc.py: se utiliza para analizar la sintaxis del lenguaje, la sintaxis generalmente se especifica en términos de una gramática BNF. Por ejemplo, si quisiera analizar expresiones aritméticas simples, primero podría escribir una especificación gramatical inequívoca, ejemplo de implementación: 
   
