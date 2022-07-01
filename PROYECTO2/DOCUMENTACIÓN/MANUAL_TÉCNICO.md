@@ -406,10 +406,10 @@ INSTRUCCIONES2 : METODOS
 METODOS : METODOS METODO
           | METODO 
 
-METODO: METHOD_VOID ID LPAREN RPAREN LKEY empty RKEY 
-               | METHOD_VOID ID LPAREN RPAREN LKEY SENTENCES_METHOD RKEY
-               | METHOD_VOID ID LPAREN L_PARAMS RPAREN LKEY empty RKEY
-               | METHOD_VOID ID LPAREN L_PARAMS RPAREN LKEY SENTENCES_METHOD RKEY
+METODO : tk_reservda_void tk_identificador tk_par_abierto tk_par_cerrado tk_llave_abierta tk_llave_cerrada 
+                  |tk_reservda_void tk_par_abierto INSTRUCCIONES3 tk_par_cerrado tk_llave_abierta tk_llave_cerrada
+                  |tk_reservda_void tk_identificador tk_par_abierto INSTRUCCIONES3 tk_par_cerrado tk_llave_abierta INSTRUCCIONES4 tk_llave_cerrada
+                  |INSTRUCCIONES4
 
 
 SENTENCES_METHOD : SENTENCES_METHOD SENTENCE_METHOD
@@ -419,22 +419,23 @@ SENTENCES_METHOD : SENTENCES_METHOD SENTENCE_METHOD
 SENTENCE_METHOD : DECLARATIONS
                 | ASSIGNMENTS
                 | SENTENCES_IF
-                | METHOD_RETURN DOT_AN_DCOMMA
+                | METHOD_RETURN tk_punto_coma
 
  FUNTIONS : FUNTIONS FUNTION
                 | FUNTION 
 
- FUNTION : TYPE_INT COUPLER
-                | TYPE_DOUBLE COUPLER
-                | TYPE_STRING COUPLER
-                | TYPE_CHAR COUPLER
-                | TYPE_BOOL COUPLER
+ FUNTION : TYPE_INT C
+                | tk_tipo_double C
+                | tk_tipo_string C
+                | tk_boolean_false C
+                | tk_boolean_true C
 
 
- COUPLER : ID LPAREN RPAREN LKEY empty RKEY 
-                | ID LPAREN RPAREN LKEY SENTENCES_FUNTION RKEY
-                | ID LPAREN L_PARAMS RPAREN LKEY empty RKEY
-                | ID LPAREN L_PARAMS RPAREN LKEY SENTENCES_FUNTION RKEY
+
+ C : ID tk_par_abierto tk_par_cerrado tk_llave_abierta empty tk_llave_cerrada  
+                | tk_identificador tk_par_abierto tk_par_cerrado tk_llave_abierta SENTENCES_FUNTION tk_llave_cerrada 
+                | tk_identificador tk_par_abierto L_PARAMS tk_par_cerrado tk_llave_abierta tk_llave_cerrada 
+                | tk_identificador tk_par_abierto L_PARAMS tk_par_cerrado tk_llave_abierta SENTENCES_FUNTION tk_llave_cerrada 
 
 
 SENTENCES_FUNTION : SENTENCES_FUNTION SENTENCE_FUNTION
@@ -443,30 +444,30 @@ SENTENCES_FUNTION : SENTENCES_FUNTION SENTENCE_FUNTION
 
 SENTENCE_FUNTION : DECLARATIONS
                          | ASSIGNMENTS
-                         | METHOD_RETURN TYPE_DATO DOT_AN_DCOMMA
-                         | METHOD_RETURN ID DOT_AN_DCOMMA
+                         | METHOD_RETURN TYPE_DATO tk_punto_coma
+                         | METHOD_RETURN tk_identificador tk_punto_coma
 
 SENTENCES_IF : SENTENCES_IF SENTENCE_IF
               | SENTENCE_IF
 
 
-SENTENCE_IF : CONDITIONAL_IF LPAREN OPTIONS RPAREN LKEY SENTENCES RKEY
+SENTENCE_IF : CONDITIONAL_IF tk_par_abierto OPTIONS tk_par_cerrado tk_llave_abierta SENTENCES tk_llave_cerrada 
 
 
 OPTIONS : OPTIONS OPTION
                 | OPTION
 
 
-OPTION : OPTION IQUALS OPTION
+OPTION : OPTION tk_igualS OPTION
                | OPTION DIFFERENT OPTION
-               | OPTION IQUAL_GREATER OPTION
-               | OPTION IQUAL_LESS OPTION
+               | OPTION tk_igual_GREATER OPTION
+               | OPTION tk_igual_LESS OPTION
                | OPTION AND OPTION
                | OPTION OR OPTION
                | OPTION NOT OPTION
                | OPTION GREATER OPTION
                | OPTION LESS OPTION
-               | ID
+               | tk_identificador
                | TYPE_DATO
 
 
@@ -482,11 +483,11 @@ DECLARATIONS : DECLARATIONS DECLARATION
                      | DECLARATION
 
 
-DECLARATION : TYPE_INT ID IQUAL INT DOT_AN_DCOMMA
-                    | TYPE_DOUBLE ID IQUAL FLOAT DOT_AN_DCOMMA
-                    | TYPE_STRING ID IQUAL STRING DOT_AN_DCOMMA
-                    | TYPE_CHAR ID IQUAL CHAR DOT_AN_DCOMMA
-                    | TYPE_BOOL ID IQUAL DATA_BOOL DOT_AN_DCOMMA
+DECLARATION : TYPE_INT tk_identificador tk_igual INT tk_punto_coma
+                    | tk_tipo_double tk_identificador tk_igual FLOAT tk_punto_coma
+                    | tk_tipo_string tk_identificador tk_igual STRING tk_punto_coma
+                    | TYPE_CHAR tk_identificador tk_igual CHAR tk_punto_coma
+                    | TYPE_BOOL tk_identificador tk_igual DATA_BOOL tk_punto_coma
 ```
 
 

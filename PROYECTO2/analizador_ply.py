@@ -11,6 +11,8 @@ def getColumn(t):
   line_start = INPUT.rfind('\n', 0, t.lexpos) + 1
   return (t.lexpos-line_start)+1
 
+  
+
 exp_reg = {   
   't_tk_dato_double':'\d+\.\d\d*',
   't_tk_dato_tipo_Int':'\d+',
@@ -216,10 +218,12 @@ def p_INSTRUCCIONES(p):
 def p_INSTRUCCIONES2(p):
   '''
   INSTRUCCIONES2 : tk_reservda_void tk_identificador tk_par_abierto tk_par_cerrado tk_llave_abierta tk_llave_cerrada 
-                  |tk_reservda_void tk_par_abierto INSTRUCCIONES3 tk_par_cerrado tk_llave_abierta tk_llave_cerrada
-                  |tk_reservda_void tk_identificador tk_par_abierto INSTRUCCIONES3 tk_par_cerrado tk_llave_abierta INSTRUCCIONES4 tk_llave_cerrada
-                  |INSTRUCCIONES4
-  '''
+
+    '''
+                  # |tk_reservda_void tk_par_abierto INSTRUCCIONES3 tk_par_cerrado tk_llave_abierta tk_llave_cerrada
+                  # |tk_reservda_void tk_identificador tk_par_abierto INSTRUCCIONES3 tk_par_cerrado tk_llave_abierta INSTRUCCIONES4 tk_llave_cerrada
+                  # |INSTRUCCIONES4
+
   if len(p) == 2:
     p[0] = p[1]
   elif len(p) == 7:
